@@ -1,39 +1,8 @@
-# Azure Provision Utility
-This is a set of Powershell Modules to simplify the Azure Provision work.
-
-It includes:
-
-* Login
-* Resource Group
-* IoTHub
-* Stream Analytics
-* KeyVault
-* AZure SQL
-* ARM
-
-### The two modules are need to be installed first
-
-```powershell
-Install-Module -Name Az -AllowClobber -Scope CurrentUser -Force -ErrorAction Stop
-Install-Module -Name SqlServer -AllowClobber -Scope CurrentUser -Force -ErrorAction Stop
-```
-
-###  Login 
-
-``` powershell
-LoginWithPrincipal `
-    -applicationId $args[0] `
-    -applicationSecret $args[1] `
-    -subscriptionId $args[2] `
-    -tenantId $args[3] `
-    -cloud $args[4]
-```
 
 
-### create a Logic App call a SQL store procedure
-``` power shell
 
 $currentPath = Convert-Path .
+
 
 Import-Module "$currentPath/modules/arm.psm1"
 
@@ -49,6 +18,11 @@ $sqlDatabaseName = $args[7]
 $sqluser = $args[8]  
 $keyVaultName = $args[9]
 $sqlpwdSecretName = $args[10]  
+
+
+
+
+
 
 $sqlpwd = GetSecretFromKeyVault `
     -keyVaultName $keyVaultName `
@@ -214,6 +188,10 @@ Set-Content -Path $logicAppTemplateDefPath -Value $logicAppTemplateDef
 $logicAppParamDefPath = "$currentPath/tmp/"+$logicAppName+"_param.json "
 Set-Content -Path $logicAppParamDefPath -Value $logicAppParamDef
 
+
+
+
+
 DeployByARM `
     -resourceGroupName $resgrp `
     -deploymentName $logicAppName `
@@ -225,4 +203,3 @@ DeployByARM `
     -deploymentName $logicAppName `
     -templateFile $logicAppTemplateDefPath `
     -templateParameterFile $logicAppParamDefPath
-```
